@@ -2,188 +2,138 @@
   <!-- Preconnect to your domain to help speed up font requests -->
   <link rel="preconnect" href="https://mazzzystar.com" crossorigin>
 
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/js/jquery.min.js" as="script">
+  <link rel="preload" href="/css/style.css" as="style">
+
   <!-- Preload fonts -->
   <link rel="preload" href="/fonts/HYShuSongErS.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/FZKTJW.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/FZHTJW.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/HYFangSongJ.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
-  <style>
-    .lang-switch {
-      float: left;
-      color: #000 !important;
-      opacity: 0.6;
-      text-decoration: none !important;
-      transition: opacity 0.2s;
-      display: block !important;
-      padding: 20px 15px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .lang-switch:hover {
-      opacity: 1;
-      text-decoration: none !important;
-    }
-
-    #nav-rss-link {
-      float: left;
-      color: #000 !important;
-      opacity: 0.6;
-      text-decoration: none !important;
-      transition: opacity 0.2s;
-      display: inline-block !important;
-      visibility: visible !important;
-      padding: 20px 15px;
-      font-size: 16px;
-    }
-
-    #nav-rss-link:before {
-      content: "\f09e";
-      font-family: 'FontAwesome' !important;
-      display: inline-block !important;
-      visibility: visible !important;
-      margin-right: 5px;
-    }
-
-    #nav-rss-link:hover {
-      opacity: 1;
-      text-decoration: none !important;
-    }
-
-    #main-nav-toggle {
-      display: none;
-    }
-
-    @media screen and (max-width: 768px) {
-      #main-nav-toggle {
-        display: block;
-      }
-    }
-  </style>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="/css/fontawesome.css">
 
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="robots" content="index,follow">
 
-  <!-- FontAwesome -->
-  <link rel="preload" href="/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="<%- url_for('css/fontawesome.css') %>">
+  <!-- RSS Feed -->
+  <% if (config.feed && config.feed.path) { %>
+    <link rel="alternate" type="application/atom+xml" title="<%= config.title %>"
+      href="<%- url_for(config.feed.path) %>">
+    <% } else if (theme.rss) { %>
+      <%- feed_tag(theme.rss) %>
+        <% } %>
 
-  <%- partial('google-analytics') %>
+          <% var title='' ; if (is_archive()){ title='Archives' ; if (is_month()){ title +=': ' + page.year + '/' +
+            page.month; } else if (is_year()){ title +=': ' + page.year; } } else if (is_category()){ title='Category: '
+            + page.category; } else if (is_tag()){ title='Tag: ' + page.tag; } else if (page.title) { title=page.title;
+            } else { title=config.title; } var description='' ; if (page.description) { description=page.description; }
+            else if (page.excerpt) { description=strip_html(page.excerpt); } else if (page.content) {
+            description=strip_html(page.content); } else { description=config.description; }
+            description=description.substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
+            keywords=page.keywords; } else if (page.tags && page.tags.length) { keywords=page.tags.map(function(tag) {
+            return tag.name; }).join(','); } function getFullUrl(path) { if (path.startsWith('http')) return path;
+            return config.url + (path.startsWith('/') ? '' : '/' ) + path; } var image=page.cover_image ||
+            config.default_image || '/favicon.jpg' ; var fullImageUrl=getFullUrl(image); var
+            pageUrl=getFullUrl(page.path); %>
 
-    <!-- RSS Feed -->
-    <% if (config.feed && config.feed.path) { %>
-      <link rel="alternate" type="application/atom+xml" title="<%= config.title %>"
-        href="<%- url_for(config.feed.path) %>">
-      <% } else if (theme.rss) { %>
-        <%- feed_tag(theme.rss) %>
-          <% } %>
+            <title>
+              <%= title %>
+            </title>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            <meta name="author" content="<%= config.author %>">
+            <meta name="description" content="<%= description %>">
+            <% if (keywords) { %>
+              <meta name="keywords" content="<%= keywords %>">
+              <% } %>
 
-            <% var title='' ; if (is_archive()){ title='Archives' ; if (is_month()){ title +=': ' + page.year + '/' +
-              page.month; } else if (is_year()){ title +=': ' + page.year; } } else if (is_category()){
-              title='Category: ' + page.category; } else if (is_tag()){ title='Tag: ' + page.tag; } else if (page.title)
-              { title=page.title; } else { title=config.title; } var description='' ; if (page.description) {
-              description=page.description; } else if (page.excerpt) { description=strip_html(page.excerpt); } else if
-              (page.content) { description=strip_html(page.content); } else { description=config.description; }
-              description=description.substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
-              keywords=page.keywords; } else if (page.tags && page.tags.length) { keywords=page.tags.map(function(tag) {
-              return tag.name; }).join(','); } function getFullUrl(path) { if (path.startsWith('http')) return path;
-              return config.url + (path.startsWith('/') ? '' : '/' ) + path; } var image=page.cover_image ||
-              config.default_image || '/favicon.jpg' ; var fullImageUrl=getFullUrl(image); var
-              pageUrl=getFullUrl(page.path); %>
+                <link rel="canonical" href="<%= pageUrl %>">
 
-              <title>
-                <%= title %>
-              </title>
-              <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-              <meta name="author" content="<%= config.author %>">
-              <meta name="description" content="<%= description %>">
-              <% if (keywords) { %>
-                <meta name="keywords" content="<%= keywords %>">
-                <% } %>
+                <!-- Open Graph -->
+                <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+                <meta property="og:title" content="<%= title %>">
+                <meta property="og:url" content="<%= pageUrl %>">
+                <meta property="og:image" content="<%= fullImageUrl %>">
+                <meta property="og:description" content="<%= description %>">
+                <meta property="og:site_name" content="<%= config.title %>">
+                <meta property="og:locale" content="<%= config.language %>">
+                <meta property="article:author" content="<%= config.author %>">
+                <% if (keywords) { %>
+                  <meta property="article:tag" content="<%= keywords %>">
+                  <% } %>
 
-                  <link rel="canonical" href="<%= pageUrl %>">
-
-                  <!-- Open Graph -->
-                  <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
-                  <meta property="og:title" content="<%= title %>">
-                  <meta property="og:url" content="<%= pageUrl %>">
-                  <meta property="og:image" content="<%= fullImageUrl %>">
-                  <meta property="og:description" content="<%= description %>">
-                  <meta property="og:site_name" content="<%= config.title %>">
-                  <meta property="og:locale" content="<%= config.language %>">
-                  <meta property="article:author" content="<%= config.author %>">
-                  <% if (keywords) { %>
-                    <meta property="article:tag" content="<%= keywords %>">
-                    <% } %>
-
-                      <% if (is_post()) { %>
-                        <meta property="article:published_time" content="<%= page.date.toISOString() %>">
-                        <% if (page.updated) { %>
-                          <meta property="article:modified_time" content="<%= page.updated.toISOString() %>">
+                    <% if (is_post()) { %>
+                      <meta property="article:published_time" content="<%= page.date.toISOString() %>">
+                      <% if (page.updated) { %>
+                        <meta property="article:modified_time" content="<%= page.updated.toISOString() %>">
+                        <% } %>
                           <% } %>
-                            <% } %>
 
-                              <!-- Twitter Card -->
-                              <meta name="twitter:card" content="summary_large_image">
-                              <meta name="twitter:title" content="<%= title %>">
-                              <meta name="twitter:description" content="<%= description %>">
-                              <meta name="twitter:image" content="<%= fullImageUrl %>">
+                            <!-- Twitter Card -->
+                            <meta name="twitter:card" content="summary_large_image">
+                            <meta name="twitter:title" content="<%= title %>">
+                            <meta name="twitter:description" content="<%= description %>">
+                            <meta name="twitter:image" content="<%= fullImageUrl %>">
 
-                              <!-- CSS & JS -->
-                              <link rel="stylesheet" href="<%- url_for('css/style.css') %>">
-                              <link rel="stylesheet" href="<%- url_for('fancybox/jquery.fancybox-1.3.4.css') %>">
+                            <!-- Stylesheets -->
+                            <link rel="stylesheet" href="/css/style.css">
+                            <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css">
 
-                              <!-- 使用与 fancybox 1.3.4 兼容的 jQuery 版本 -->
-                              <script src="/js/jquery.min.js"></script>
-                              <script defer src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-                              <script defer src="/js/script.js"></script>
-                              <script defer src="<%- url_for('js/clipboard.min.js') %>"></script>
+                            <!-- Scripts -->
+                            <script src="/js/jquery.min.js"></script>
+                            <script defer src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+                            <script defer src="/js/script.js"></script>
+                            <script defer src="/js/clipboard.min.js"></script>
 
-                              <!-- MathJax Configuration -->
-                              <script>
-                                window.MathJax = {
-                                  tex: {
-                                    inlineMath: [['$', '$'], ['\\(', '\\)']],
-                                    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                                    processEscapes: true
-                                  },
-                                  options: {
-                                    enableMenu: false
-                                  }
-                                };
-                              </script>
-                              <script defer src="/js/mathjax/tex-mml-chtml.js"></script>
+                            <!-- MathJax Configuration -->
+                            <script>
+                              window.MathJax = {
+                                tex: {
+                                  inlineMath: [['$', '$'], ['\\(', '\\)']],
+                                  displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                                  processEscapes: true
+                                },
+                                options: {
+                                  enableMenu: false
+                                }
+                              };
+                            </script>
+                            <script defer src="/js/mathjax/tex-mml-chtml.js"></script>
 
-                              <!-- Structured Data -->
-                              <% if (is_post()) { %>
-                                <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "<%= pageUrl %>"
-        },
-        "headline": "<%= title %>",
-        "description": "<%= description %>",
-        "author": {
-          "@type": "Person",
-          "name": "<%= config.author %>"
-        },
-        "datePublished": "<%= page.date.toISOString() %>",
-        "dateModified": "<%= page.updated ? page.updated.toISOString() : page.date.toISOString() %>",
-        "keywords": "<%= keywords %>",
-        "image": "<%= fullImageUrl %>",
-        "publisher": {
-          "@type": "Organization",
-          "name": "<%= config.title %>",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "<%= getFullUrl('favicon.jpg') %>"
-          }
+                            <!-- Structured Data -->
+                            <% if (is_post()) { %>
+                              <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "<%= pageUrl %>"
+      },
+      "headline": "<%= title %>",
+      "description": "<%= description %>",
+      "author": {
+        "@type": "Person",
+        "name": "<%= config.author %>"
+      },
+      "datePublished": "<%= page.date.toISOString() %>",
+      "dateModified": "<%= page.updated ? page.updated.toISOString() : page.date.toISOString() %>",
+      "keywords": "<%= keywords %>",
+      "image": "<%= fullImageUrl %>",
+      "publisher": {
+        "@type": "Organization",
+        "name": "<%= config.title %>",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "<%= getFullUrl('favicon.jpg') %>"
         }
       }
-      </script>
-                                <% } %>
+    }
+    </script>
+                              <% } %>
 </head>
