@@ -1,0 +1,22 @@
+<article id="<%= page.layout %>-" class="h-entry article article-type-<%= page.layout %>"
+    data-lang="<%= page.language || 'zh' %>" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-meta">
+        <a href="" class="article-date">
+            <time class="dt-published" datetime="<%= date_xml(page.date) %>" itemprop="datePublished">
+                <%= date(page.date) %>
+            </time>
+        </a>
+    </div>
+    <div class="article-inner">
+        <header class="article-header">
+            <h2 class="p-name article-title" itemprop="headline name">
+                <%= page.title %>
+            </h2>
+        </header>
+        <div class="e-content article-entry" itemprop="articleBody">
+            <%- page.content %>
+        </div>
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>

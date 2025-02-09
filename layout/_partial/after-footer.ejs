@@ -1,0 +1,112 @@
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Other scripts -->
+<script defer src="<%- url_for('js/script.js') %>"></script>
+<script defer src="<%- url_for('js/clipboard.min.js') %>"></script>
+
+<!-- MathJax -->
+<% if(theme.math && theme.math.enable){ %>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        packages: { '[+]': ['ams'] },
+        tags: 'ams'
+      },
+      options: {
+        enableMenu: false
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="/js/mathjax/tex-mml-chtml.js"></script>
+  <% } %>
+
+    <!-- jQuery and plugins -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <%- partial('gauges-analytics') %>
+
+      <% if(theme.valine.enable && theme.valine.appId && theme.valine.appKey){ %>
+        <%- js('https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js') %>
+          <script>
+            var GUEST_INFO = ['nick', 'mail', 'link'];
+            var guest_info = '<%= theme.valine.guest_info %>'.split(',').filter(function (item) {
+              return GUEST_INFO.indexOf(item) > -1
+            });
+            var notify = '<%= theme.valine.notify %>' == true;
+            var verify = '<%= theme.valine.verify %>' == true;
+            new Valine({
+              el: '.vcomment',
+              notify: notify,
+              verify: verify,
+              appId: "<%= theme.valine.appId %>",
+              appKey: "<%= theme.valine.appKey %>",
+              placeholder: "<%= theme.valine.placeholder %>",
+              pageSize: '<%= theme.valine.pageSize %>',
+              avatar: '<%= theme.valine.avatar %>',
+              lang: '<%= theme.valine.lang %>'
+            });
+          </script>
+          <% } %>
+
+            <% if(theme.math.enable && theme.math.engine=='katex' ){ %>
+              <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css"
+                integrity="sha384-R4558gYOUz8mP9YWpZJjofhk+zx0AS11p36HnD2ZKj/6JR5z27gSSULCNHIRReVs"
+                crossorigin="anonymous">
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"
+                integrity="sha384-z1fJDqw8ZApjGO3/unPWUPsIymfsJmyrDVWC8Tv/a1HeOtGmkwNd/7xUS0Xcnvsx"
+                crossorigin="anonymous"></script>
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js"
+                integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
+                crossorigin="anonymous"></script>
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  renderMathInElement(document.body, {
+                    delimiters: [
+                      { left: '$$', right: '$$', display: true },
+                      { left: '$', right: '$', display: false },
+                      { left: '\\(', right: '\\)', display: false },
+                      { left: '\\[', right: '\\]', display: true }
+                    ],
+                    throwOnError: false
+                  });
+                });
+              </script>
+              <% } %>
+
+                <script>
+                  let currentLang = localStorage.getItem('blog_language') || 'zh';
+
+                  document.addEventListener('DOMContentLoaded', function () {
+                    if (document.querySelector('.archives')) {
+                      updateLanguageDisplay();
+                      updateSwitchButton();
+                    }
+                  });
+
+                  function switchLanguage() {
+                    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+                    localStorage.setItem('blog_language', currentLang);
+                    updateLanguageDisplay();
+                    updateSwitchButton();
+                  }
+
+                  function updateLanguageDisplay() {
+                    document.querySelectorAll('.archive-article').forEach(article => {
+                      const articleLang = article.getAttribute('data-lang');
+                      if (articleLang === currentLang) {
+                        article.style.display = '';
+                      } else {
+                        article.style.display = 'none';
+                      }
+                    });
+                  }
+
+                  function updateSwitchButton() {
+                    const switchBtn = document.querySelector('.lang-switch');
+                    if (switchBtn) {
+                      switchBtn.textContent = currentLang === 'zh' ? 'EN' : '中文';
+                    }
+                  }
+                </script>

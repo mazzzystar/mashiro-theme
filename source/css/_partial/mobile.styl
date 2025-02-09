@@ -1,0 +1,32 @@
+@media mq-mobile
+  #mobile-nav
+    position: absolute
+    top: 0
+    left: 0
+    width: calc(50% - 1px)
+    height: 100%
+    background: color-mobile-nav-background
+    border-right: 1px solid #ddd
+
+@media mq-mobile
+  .mobile-nav-link
+    display: block !important
+    color: color-grey
+    text-decoration: none
+    padding: 15px 20px
+    font-weight: normal
+    font-size: 1.1em
+    &:hover
+      color: color-link
+
+@media mq-mobile
+  #nav-rss-link
+    display: inline-block !important
+    visibility: visible !important
+    opacity: 0.8
+    
+    &:before
+      font-family: 'FontAwesome'
+      content: "\f09e"
+      margin-right: 5px
+      font-size: 16px

@@ -1,0 +1,66 @@
+<% if (pagination==2){ %>
+  <% var lastYear; %>
+    <section class="archives-wrap">
+      <% page.posts.each(function(post){ %>
+        <% var currentYear=post.date.year(); %>
+          <% if (lastYear !==currentYear) { %>
+            <% if (lastYear !==undefined) { %>
+              </div>
+    </section>
+    <% } %>
+      <div class="archive-year-wrap">
+        <a href="<%- url_for(config.archive_dir + '/' + currentYear) %>" class="archive-year">
+          <%= currentYear %>
+        </a>
+      </div>
+      <div class="archives">
+        <% } %>
+          <article class="archive-article archive-type-<%= post.layout %>" data-lang="<%= post.language || 'zh' %>">
+            <div class="archive-article-inner">
+              <header class="archive-article-header">
+                <%- partial('post/title', {class_name: 'archive-article-title' , post: post }) %>
+                  <div class="archive-article-line"></div>
+                  <span class="archive-article-date">
+                    <%= date(post.date, 'YYYY-MM-DD' ) %>
+                  </span>
+              </header>
+            </div>
+          </article>
+          <% lastYear=currentYear; %>
+            <% }) %>
+              <% if (page.posts.length) { %>
+      </div>
+      </section>
+      <% } %>
+        </section>
+        <% } else { %>
+          <% var last; %>
+            <% page.posts.each(function(post, i){ %>
+              <% var year=post.date.year(); %>
+                <% if (last !=year){ %>
+                  <% if (last !=null){ %>
+                    </div>
+                    </section>
+                    <% } %>
+                      <% last=year; %>
+                        <section class="archives-wrap">
+                          <div class="archive-year-wrap">
+                            <a href="<%- url_for(config.archive_dir + '/' + year) %>" class="archive-year">
+                              <%= year %>
+                            </a>
+                          </div>
+                          <div class="archives">
+                            <% } %>
+                              <%- partial('archive-post', {post: post, even: i % 2==0}) %>
+                                <% }) %>
+                                  <% if (page.posts.length){ %>
+                          </div>
+                        </section>
+                        <% } %>
+                          <% } %>
+                            <% if (page.total> 1){ %>
+                              <nav id="page-nav">
+                                <% var prev_text="&laquo; " + __('prev');var next_text=__('next') + " &raquo;" %>
+                                  <%- paginator({ prev_text: prev_text, next_text: next_text, escape: false }) %>
+                              </nav>
+                              <% } %>

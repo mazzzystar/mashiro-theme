@@ -1,0 +1,45 @@
+<% var lastYear; %>
+    <% page.posts.sort('date', -1).each(function(post, i){ %>
+        <% var year=post.date.year(); %>
+            <% if (lastYear !==year){ %>
+                <% if (lastYear !==undefined){ %>
+                    </div>
+                    </section>
+                    <% } %>
+                        <section class="archives-wrap">
+                            <div class="archive-year-wrap">
+                                <a href="<%- url_for('archives/' + year) %>" class="archive-year">
+                                    <%= year %>
+                                </a>
+                            </div>
+                            <div class="archives">
+                                <% lastYear=year; %>
+                                    <% } %>
+
+                                        <article class="archive-article archive-type-<%= post.layout %>"
+                                            data-lang="<%= post.language || 'zh' %>">
+                                            <div class="archive-article-inner">
+                                                <header class="archive-article-header">
+                                                    <a href="<%- url_for(post.path) %>" class="archive-article-title">
+                                                        <%= post.title %>
+                                                    </a>
+                                                    <div class="archive-article-line"></div>
+                                                    <span class="archive-article-date">
+                                                        <%= date(post.date, 'YYYY-MM-DD' ) %>
+                                                    </span>
+                                                </header>
+                                            </div>
+                                        </article>
+                                        <% }) %>
+
+                                            <% if (page.posts.length){ %>
+                            </div>
+                        </section>
+                        <% } %>
+
+                            <% if (page.total> 1){ %>
+                                <nav id="page-nav">
+                                    <%- paginator({ prev_text: '&laquo; ' + __('prev'), next_text: __('next')
+                                        + ' &raquo;' }) %>
+                                </nav>
+                                <% } %>

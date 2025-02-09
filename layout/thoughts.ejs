@@ -1,0 +1,36 @@
+<!-- themes/your-theme-name/layout/thoughts.ejs -->
+<article id="page-<%= page.layout %>" class="article article-type-<%= page.layout %>">
+    <div class="article-inner">
+        <% if (page.abstract) { %>
+            <blockquote class="thoughts-abstract">
+                <p>
+                    <%- page.abstract %>
+                </p>
+            </blockquote>
+            <% } %>
+                <div class="article-entry">
+                    <% if (page.thoughts && page.thoughts.length) { %>
+                        <% page.thoughts.forEach(function(thought){ %>
+                            <div class="thought">
+                                <div class="thought-content">
+                                    <% thought.content.split('\n\n').forEach(function(para) { %>
+                                        <% if(para.trim()) { %>
+                                            <%- markdown(para.trim()) %>
+                                                <% } %>
+                                                    <% }); %>
+                                </div>
+                                <div class="thought-timestamp">
+                                    <% var date=new Date(thought.timestamp); var formattedDate=date.getFullYear() + '-'
+                                        + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' +
+                                        date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0'
+                                        + date.getMinutes()).slice(-2); %>
+                                        <%= formattedDate %>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p>No thoughts yet.</p>
+                                    <% } %>
+                </div>
+    </div>
+</article>

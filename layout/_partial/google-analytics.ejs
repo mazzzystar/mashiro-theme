@@ -1,0 +1,15 @@
+<% if (theme.google_analytics){ %>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<%= theme.google_analytics %>"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', '<%= theme.google_analytics %>', {
+      'send_page_view': true,
+      'cookie_flags': 'secure;samesite=none',
+      'transport_type': 'beacon'
+    });
+  </script>
+  <!-- End Google Analytics -->
+  <% } %>
