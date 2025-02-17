@@ -1,24 +1,40 @@
-(function($){
-  // Caption
-  $('.article-entry, .article-inner').each(function(i){
-    $(this).find('img').each(function(){
+$(document).ready(function() {
+  // Initialize fancybox for images
+  $('.article-entry').each(function(i) {
+    $(this).find('img').each(function() {
       if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
-
+      
       var alt = this.alt;
-
       if (alt) $(this).after('<span class="caption">' + alt + '</span>');
 
-      $(this).wrap('<a class="fancybox" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
-    });
-
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
+      $(this).wrap('<a class="fancybox" rel="gallery' + i + '" href="' + this.src + '" title="' + alt + '"></a>');
     });
   });
 
-  if ($.fancybox){
-    $('.fancybox').fancybox();
+  // Initialize fancybox with modern browser check
+  if (typeof $.fn.fancybox === 'function') {
+    $('.fancybox').fancybox({
+      openEffect: 'elastic',
+      closeEffect: 'elastic'
+    });
   }
+
+  // Language switcher
+  const switchBtn = document.querySelector('.lang-switch');
+  if (switchBtn) {
+    switchBtn.addEventListener('click', function() {
+      const currentLang = localStorage.getItem('blog_language') || 'zh';
+      const newLang = currentLang === 'zh' ? 'en' : 'zh';
+      localStorage.setItem('blog_language', newLang);
+      updateLanguageDisplay();
+      updateSwitchButton();
+    });
+
+    // Initial language setup
+    updateLanguageDisplay();
+    updateSwitchButton();
+  }
+
   // Mobile nav
   var $container = $('#container'),
     isMobileNavAnim = false,
@@ -70,5 +86,19 @@
     }
     codes[i].parentElement.insertBefore(copy_button, codes[i]);
   }
+});
 
-})(jQuery);
+function updateLanguageDisplay() {
+  const currentLang = localStorage.getItem('blog_language') || 'zh';
+  document.querySelectorAll('.archive-article').forEach(article => {
+    const articleLang = article.getAttribute('data-lang');
+    article.style.display = articleLang === currentLang ? '' : 'none';
+  });
+}
+
+function updateSwitchButton() {
+  const switchBtn = document.querySelector('.lang-switch');
+  if (switchBtn) {
+    switchBtn.textContent = (localStorage.getItem('blog_language') || 'zh') === 'zh' ? 'EN' : '中文';
+  }
+}

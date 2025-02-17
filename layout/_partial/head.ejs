@@ -1,113 +1,162 @@
 <head>
-  <!-- Preconnect to your domain to help speed up font requests -->
+  <!-- DNS 预解析 -->
+  <link rel="dns-prefetch" href="//mazzzystar.com">
+
+  <!-- 预连接 -->
   <link rel="preconnect" href="https://mazzzystar.com" crossorigin>
 
-  <!-- Preload critical resources -->
-  <link rel="preload" href="/js/jquery.min.js" as="script">
-  <link rel="preload" href="/css/style.css" as="style">
+  <!-- Google Analytics -->
+  <% if (theme.google_analytics){ %>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= theme.google_analytics %>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', '<%= theme.google_analytics %>', {
+        'send_page_view': true,
+        'cookie_flags': 'secure;samesite=none',
+        'transport_type': 'beacon'
+      });
+    </script>
+    <% } %>
 
-  <!-- Preload fonts -->
-  <link rel="preload" href="/fonts/HYShuSongErS.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/FZKTJW.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/FZHTJW.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/HYFangSongJ.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+      <!-- 预加载关键资源 -->
+      <link rel="preload" href="/css/style.css" as="style">
+      <link rel="preload" href="/js/jquery.min.js" as="script">
 
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="/css/fontawesome.css">
+      <!-- 预加载首屏字体，其他字体懒加载 -->
+      <link rel="preload" href="/fonts/HYShuSongErS.woff2" as="font" type="font/woff2" crossorigin>
 
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="robots" content="index,follow">
+      <!-- 使用 font-display: swap 确保文字在字体加载时可见 -->
+      <style>
+        @font-face {
+          font-family: 'HYShuSongErS';
+          font-display: swap;
+          src: local('HYShuSongErS'), url('/fonts/HYShuSongErS.woff2') format('woff2');
+        }
+      </style>
 
-  <!-- RSS Feed -->
-  <% if (config.feed && config.feed.path) { %>
-    <link rel="alternate" type="application/atom+xml" title="<%= config.title %>"
-      href="<%- url_for(config.feed.path) %>">
-    <% } else if (theme.rss) { %>
-      <%- feed_tag(theme.rss) %>
+      <!-- 条件加载 MathJax -->
+      <% if (page.mathjax) { %>
+        <link rel="preload" href="/js/mathjax/tex-mml-chtml.js" as="script">
         <% } %>
 
-          <% var title='' ; if (is_archive()){ title='Archives' ; if (is_month()){ title +=': ' + page.year + '/' +
-            page.month; } else if (is_year()){ title +=': ' + page.year; } } else if (is_category()){ title='Category: '
-            + page.category; } else if (is_tag()){ title='Tag: ' + page.tag; } else if (page.title) { title=page.title;
-            } else { title=config.title; } var description='' ; if (page.description) { description=page.description; }
-            else if (page.excerpt) { description=strip_html(page.excerpt); } else if (page.content) {
-            description=strip_html(page.content); } else { description=config.description; }
-            description=description.substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
-            keywords=page.keywords; } else if (page.tags && page.tags.length) { keywords=page.tags.map(function(tag) {
-            return tag.name; }).join(','); } function getFullUrl(path) { if (path.startsWith('http')) return path;
-            return config.url + (path.startsWith('/') ? '' : '/' ) + path; } var image=page.cover_image ||
-            config.default_image || '/favicon.jpg' ; var fullImageUrl=getFullUrl(image); var
-            pageUrl=getFullUrl(page.path); %>
+          <!-- Preload fonts -->
+          <link rel="preload" href="/fonts/FZKTJW.woff2" as="font" type="font/woff2" crossorigin>
+          <link rel="preload" href="/fonts/FZHTJW.woff2" as="font" type="font/woff2" crossorigin>
+          <link rel="preload" href="/fonts/HYFangSongJ.woff2" as="font" type="font/woff2" crossorigin>
+          <link rel="preload" href="/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>
+          <link rel="preload" href="/fonts/GowunDodum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
-            <title>
-              <%= title %>
-            </title>
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-            <meta name="author" content="<%= config.author %>">
-            <meta name="description" content="<%= description %>">
-            <% if (keywords) { %>
-              <meta name="keywords" content="<%= keywords %>">
-              <% } %>
+          <!-- FontAwesome -->
+          <link rel="stylesheet" href="/css/fontawesome.css">
 
-                <link rel="canonical" href="<%= pageUrl %>">
+          <meta charset="utf-8">
+          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+          <meta name="robots" content="index,follow">
 
-                <!-- Open Graph -->
-                <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
-                <meta property="og:title" content="<%= title %>">
-                <meta property="og:url" content="<%= pageUrl %>">
-                <meta property="og:image" content="<%= fullImageUrl %>">
-                <meta property="og:description" content="<%= description %>">
-                <meta property="og:site_name" content="<%= config.title %>">
-                <meta property="og:locale" content="<%= config.language %>">
-                <meta property="article:author" content="<%= config.author %>">
-                <% if (keywords) { %>
-                  <meta property="article:tag" content="<%= keywords %>">
-                  <% } %>
+          <!-- RSS Feed -->
+          <% if (config.feed && config.feed.path) { %>
+            <link rel="alternate" type="application/atom+xml" title="<%= config.title %>"
+              href="<%- url_for(config.feed.path) %>">
+            <% } else if (theme.rss) { %>
+              <%- feed_tag(theme.rss) %>
+                <% } %>
 
-                    <% if (is_post()) { %>
-                      <meta property="article:published_time" content="<%= page.date.toISOString() %>">
-                      <% if (page.updated) { %>
-                        <meta property="article:modified_time" content="<%= page.updated.toISOString() %>">
-                        <% } %>
+                  <% var title='' ; if (is_archive()){ title='Archives' ; if (is_month()){ title +=': ' + page.year
+                    + '/' + page.month; } else if (is_year()){ title +=': ' + page.year; } } else if (is_category()){
+                    title='Category: ' + page.category; } else if (is_tag()){ title='Tag: ' + page.tag; } else if
+                    (page.title) { title=page.title; } else { title=config.title; } var description='' ; if
+                    (page.description) { description=page.description; } else if (page.excerpt) {
+                    description=strip_html(page.excerpt); } else if (page.content) {
+                    description=strip_html(page.content); } else { description=config.description; }
+                    description=description.substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
+                    keywords=page.keywords; } else if (page.tags && page.tags.length) {
+                    keywords=page.tags.map(function(tag) { return tag.name; }).join(','); } function getFullUrl(path) {
+                    if (path.startsWith('http')) return path; return config.url + (path.startsWith('/') ? '' : '/' ) +
+                    path; } var image=page.cover_image || config.default_image || '/favicon.jpg' ; var
+                    fullImageUrl=getFullUrl(image); var pageUrl=getFullUrl(page.path); %>
+
+                    <title>
+                      <%= title %>
+                    </title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+                    <meta name="author" content="<%= config.author %>">
+                    <meta name="description" content="<%= description %>">
+                    <% if (keywords) { %>
+                      <meta name="keywords" content="<%= keywords %>">
+                      <% } %>
+
+                        <link rel="canonical" href="<%= pageUrl %>">
+
+                        <!-- Open Graph -->
+                        <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
+                        <meta property="og:title" content="<%= title %>">
+                        <meta property="og:url" content="<%= pageUrl %>">
+                        <meta property="og:image" content="<%= fullImageUrl %>">
+                        <meta property="og:description" content="<%= description %>">
+                        <meta property="og:site_name" content="<%= config.title %>">
+                        <meta property="og:locale" content="<%= config.language %>">
+                        <meta property="article:author" content="<%= config.author %>">
+                        <% if (keywords) { %>
+                          <meta property="article:tag" content="<%= keywords %>">
                           <% } %>
 
-                            <!-- Twitter Card -->
-                            <meta name="twitter:card" content="summary_large_image">
-                            <meta name="twitter:title" content="<%= title %>">
-                            <meta name="twitter:description" content="<%= description %>">
-                            <meta name="twitter:image" content="<%= fullImageUrl %>">
-
-                            <!-- Stylesheets -->
-                            <link rel="stylesheet" href="/css/style.css">
-                            <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css">
-
-                            <!-- Scripts -->
-                            <script src="/js/jquery.min.js"></script>
-                            <script defer src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-                            <script defer src="/js/script.js"></script>
-                            <script defer src="/js/clipboard.min.js"></script>
-
-                            <!-- MathJax Configuration -->
-                            <script>
-                              window.MathJax = {
-                                tex: {
-                                  inlineMath: [['$', '$'], ['\\(', '\\)']],
-                                  displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                                  processEscapes: true
-                                },
-                                options: {
-                                  enableMenu: false
-                                }
-                              };
-                            </script>
-                            <script defer src="/js/mathjax/tex-mml-chtml.js"></script>
-
-                            <!-- Structured Data -->
                             <% if (is_post()) { %>
-                              <script type="application/ld+json">
+                              <meta property="article:published_time" content="<%= page.date.toISOString() %>">
+                              <% if (page.updated) { %>
+                                <meta property="article:modified_time" content="<%= page.updated.toISOString() %>">
+                                <% } %>
+                                  <% } %>
+
+                                    <!-- Twitter Card -->
+                                    <meta name="twitter:card" content="summary_large_image">
+                                    <meta name="twitter:title" content="<%= title %>">
+                                    <meta name="twitter:description" content="<%= description %>">
+                                    <meta name="twitter:image" content="<%= fullImageUrl %>">
+
+                                    <!-- Stylesheets -->
+                                    <link rel="stylesheet" href="/css/style.css">
+                                    <link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css">
+
+                                    <!-- Scripts -->
+                                    <script src="/js/jquery.min.js"></script>
+                                    <script src="/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+                                    <script src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+                                    <script src="/js/script.js"></script>
+                                    <script src="/js/clipboard.min.js"></script>
+
+                                    <% if (theme.fancybox){ %>
+                                      <link rel="stylesheet"
+                                        href="<%- url_for('fancybox/jquery.fancybox-1.3.4.css', {relative: true}) %>">
+                                      <% } %>
+
+                                        <!-- MathJax Configuration -->
+                                        <script>
+                                          window.MathJax = {
+                                            tex: {
+                                              inlineMath: [['$', '$'], ['\\(', '\\)']],
+                                              displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                                              processEscapes: true
+                                            },
+                                            options: {
+                                              enableMenu: false
+                                            },
+                                            startup: {
+                                              ready: () => {
+                                                MathJax.startup.defaultReady();
+                                              }
+                                            },
+                                            loader: {
+                                              load: ['[tex]/ams']
+                                            }
+                                          };
+                                        </script>
+                                        <script id="MathJax-script" defer src="/js/mathjax/tex-mml-chtml.js"></script>
+
+                                        <!-- Structured Data -->
+                                        <% if (is_post()) { %>
+                                          <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -135,5 +184,19 @@
       }
     }
     </script>
-                              <% } %>
+                                          <% } %>
+
+                                            <!-- 删除或注释掉这行 -->
+                                            <!-- <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet"> -->
+
+                                            <!-- 改用本地字体 -->
+                                            <style>
+                                              @font-face {
+                                                font-family: 'Gowun Dodum';
+                                                font-style: normal;
+                                                font-weight: 400;
+                                                font-display: swap;
+                                                src: url('/fonts/GowunDodum-Regular.woff2') format('woff2');
+                                              }
+                                            </style>
 </head>
