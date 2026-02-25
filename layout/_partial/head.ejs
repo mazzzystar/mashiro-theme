@@ -1,9 +1,15 @@
 <head>
   <!-- DNS 预解析 -->
   <link rel="dns-prefetch" href="//mazzzystar.com">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
 
   <!-- 预连接 -->
   <link rel="preconnect" href="https://mazzzystar.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Google Fonts: Gentium Plus (English serif) + Fira Code (monospace) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Fira+Code:wght@400;500&display=swap">
 
   <!-- Google Analytics -->
   <% if (theme.google_analytics){ %>
@@ -37,7 +43,7 @@
           <link rel="preload" href="/fonts/FZKTJW.woff2" as="font" type="font/woff2" crossorigin>
           <link rel="preload" href="/fonts/FZHTJW.woff2" as="font" type="font/woff2" crossorigin>
           <link rel="preload" href="/fonts/fontawesome-webfont.woff2" as="font" type="font/woff2" crossorigin>
-          <link rel="preload" href="/fonts/GowunDodum-Regular.woff2" as="font" type="font/woff2" crossorigin>
+          <!-- GowunDodum removed, using Gentium Plus from Google Fonts -->
 
           <!-- FontAwesome -->
           <link rel="stylesheet" href="/css/fontawesome.css">
@@ -202,8 +208,7 @@
                                                       <!-- Font Loader for Progressive Font Loading -->
                                                       <script defer src="/js/font-loader.js"></script>
 
-                                                      <!-- Include dedicated font CSS -->
-                                                      <link rel="stylesheet" href="/css/fonts/gowun-dodum.css">
+                                                      <!-- Gowun Dodum CSS removed, using Gentium Plus -->
 
                                                       <!-- Language switcher styling -->
                                                       <style>
