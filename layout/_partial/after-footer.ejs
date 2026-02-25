@@ -29,6 +29,25 @@
 
         <%- partial('gauges-analytics') %>
 
+          <!-- Dark Mode Toggle -->
+          <script>
+            (function() {
+              var darkMode = localStorage.getItem('dark_mode');
+              if (darkMode === null) {
+                darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              } else {
+                darkMode = darkMode === 'true';
+              }
+              if (darkMode) document.documentElement.classList.add('dark-mode');
+
+              window.toggleDarkMode = function() {
+                darkMode = !darkMode;
+                document.documentElement.classList.toggle('dark-mode', darkMode);
+                localStorage.setItem('dark_mode', darkMode);
+              };
+            })();
+          </script>
+
           <!-- Language Switch -->
           <script>
             let currentLang = localStorage.getItem('blog_language') || ((navigator.language || '').startsWith('zh') ? 'zh' : 'en');
