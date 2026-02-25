@@ -302,27 +302,7 @@ body:after {
     width: 16em;
   }
 }
-@font-face {
-  font-family: "Chinese";
-  font-style: normal;
-  font-weight: normal;
-  src: local("HYShuSongErS"), url("/fonts/HYShuSongErS.woff2") format("woff2");
-  font-display: swap;
-}
-@font-face {
-  font-family: "Chinese";
-  font-style: italic;
-  font-weight: normal;
-  src: local("FZKTJW"), url("/fonts/FZKTJW.woff2") format("woff2");
-  font-display: swap;
-}
-@font-face {
-  font-family: "Chinese";
-  font-style: normal;
-  font-weight: bold;
-  src: local("FZHTJW"), url("/fonts/FZHTJW.woff2") format("woff2");
-  font-display: swap;
-}
+/* Chinese fonts defined in font-subset.css (subset tiers) */
 html,
 body,
 div,

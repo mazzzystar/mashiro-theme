@@ -14,13 +14,13 @@
             <div class="main-nav-space-between"></div>
 
             <!-- Dark mode toggle -->
-            <a class="dark-mode-toggle" href="javascript:void(0)" onclick="toggleDarkMode()" title="Toggle dark mode"></a>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode" type="button"></button>
 
             <!-- Language switcher -->
             <% if (page.layout==='post' || is_home()) { %>
-              <a class="lang-switch" href="javascript:void(0)" onclick="switchLanguage()">
+              <button class="lang-switch" onclick="switchLanguage()" type="button">
                 EN
-              </a>
+              </button>
               <% } %>
 
                 <!-- RSS icon -->

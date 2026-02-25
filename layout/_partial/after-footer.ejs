@@ -10,23 +10,6 @@
     <script defer src="<%- url_for('js/script.js') %>"></script>
     <script defer src="<%- url_for('js/clipboard.min.js') %>"></script>
 
-    <!-- MathJax -->
-    <% if(theme.math && theme.math.enable){ %>
-      <script>
-        window.MathJax = {
-          tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            packages: { '[+]': ['ams'] },
-            tags: 'ams'
-          },
-          options: {
-            enableMenu: false
-          }
-        };
-      </script>
-      <script id="MathJax-script" async src="/js/mathjax/tex-mml-chtml.js"></script>
-      <% } %>
-
         <%- partial('gauges-analytics') %>
 
           <!-- Dark Mode Toggle -->
