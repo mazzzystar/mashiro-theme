@@ -63,6 +63,8 @@ $logo-text
   padding: 0 15px
   max-width: 44em
   margin: 0 auto
+  @media mq-mobile
+    padding: 0 8px
 
 .main-nav-link
   font-size: 18px
@@ -73,11 +75,16 @@ $logo-text
   transition: opacity 0.2s
   &:hover
     opacity: 1
+  @media mq-mobile
+    padding: 15px 8px
 
 .main-nav-space-between
   height: 1px
   flex-grow: 1
   margin: 0 15px
+  @media mq-mobile
+    margin: 0
+    flex-grow: 0
 
 #main-nav-toggle
   display: none
