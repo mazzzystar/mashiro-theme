@@ -1,24 +1,23 @@
-// https://github.com/chriskempson/tomorrow-theme
-highlight-background = color-background
-highlight-current-line = #efefef
-highlight-selection = #d6d6d6
-highlight-foreground = #4d4d4c
-highlight-comment = #8e908c
-highlight-red = #c82829
-highlight-orange = #f5871f
-highlight-yellow = #eab700
-highlight-green = #718c00
-highlight-aqua = #3e999f
-highlight-blue = #4271ae
-highlight-purple = #8959a8
+highlight-background = #f6f3eb
+highlight-toolbar = #eee8dd
+highlight-current-line = #ebe5d8
+highlight-selection = #ded5c4
+highlight-foreground = #252321
+highlight-comment = #8a8378
+highlight-red = #b54b4b
+highlight-orange = #a76528
+highlight-yellow = #8a6d18
+highlight-green = #5c7a34
+highlight-aqua = #287b76
+highlight-blue = #356fa6
+highlight-purple = #8558a3
 
 $code-block
   background: highlight-background
   margin: 0
-  border-style: solid
-  border-color: color-border
-  border-width: 1px
-  overflow: auto
+  border: 1px solid rgba(183,181,172,0.85)
+  border-radius: 10px
+  overflow: hidden
   color: highlight-foreground
   line-height: font-size * line-height
 
@@ -30,14 +29,21 @@ $line-numbers
   pre, code
     font-family: font-mono
   code
-    background: color-background
-    text-shadow: 0 1px color-background
-    padding: 0 0.3em
+    background: rgba(246,243,235,0.9)
+    border: 1px solid rgba(183,181,172,0.36)
+    border-radius: 4px
+    color: #3f3a33
+    text-shadow: none
+    padding: 0.05em 0.32em
   pre
     @extend $code-block
-    padding: 15px
+    padding: 16px
+    overflow: auto
     code
       background: none
+      border: none
+      border-radius: 0
+      color: inherit
       text-shadow: none
       padding: 0
   .highlight
@@ -47,8 +53,93 @@ $line-numbers
     padding: 0
     pre
       border: none
+      border-radius: 0
       margin: 0
-      padding: 15px
+      padding: 16px
+      background: transparent
+      overflow: auto
+      white-space: pre
+    code
+      border: none
+      background: transparent
+      color: inherit
+      padding: 0
+  .code-block-toolbar
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 10px
+    min-height: 38px
+    padding: 0 10px 0 14px
+    border-bottom: 1px solid rgba(183,181,172,0.58)
+    background: highlight-toolbar
+  .code-block-lang
+    color: #6d665d
+    font-family: font-sans
+    font-size: 0.78em
+    line-height: 1
+    letter-spacing: 0
+    text-transform: uppercase
+  .code-block-actions
+    display: flex
+    align-items: center
+    gap: 6px
+  .copy-button,
+  .code-fold-toggle
+    appearance: none
+    border: 1px solid rgba(183,181,172,0.8)
+    border-radius: 6px
+    background: rgba(255,255,255,0.56)
+    color: #4c4740
+    cursor: pointer
+    font-family: font-sans
+    font-size: 0.74em
+    line-height: 1
+    padding: 6px 8px
+    transition: background 0.18s, border-color 0.18s, color 0.18s
+    &:hover
+      background: rgba(255,255,255,0.92)
+      border-color: rgba(130,125,116,0.8)
+  .highlight.is-collapsed
+    pre
+      display: none
+    .code-block-toolbar
+      border-bottom: none
+  .answer-block
+    border: 1px solid rgba(183,181,172,0.76)
+    border-radius: 12px
+    background: rgba(250,249,246,0.66)
+    margin: line-height 0
+    overflow: hidden
+    summary
+      display: flex
+      align-items: center
+      justify-content: space-between
+      gap: 12px
+      cursor: pointer
+      color: color-default
+      font-weight: bold
+      list-style: none
+      padding: 0.9em 1.15em
+      &::-webkit-details-marker
+        display: none
+      &:after
+        content: "展开"
+        color: color-grey
+        flex: 0 0 auto
+        font-size: 0.82em
+        font-weight: normal
+  .answer-block[open]
+    summary
+      border-bottom: 1px solid rgba(183,181,172,0.52)
+      &:after
+        content: "收起"
+  .answer-block-content
+    padding: 0.25em 1.15em 1.05em
+    > :first-child
+      margin-top: 0.8em
+    > :last-child
+      margin-bottom: 0
   .gist
     margin: 0 article-padding * -1
     border-style: solid
