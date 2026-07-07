@@ -57,12 +57,13 @@
                     (page.title) { title=page.title; } else { title=config.title; } var description='' ; if
                     (page.description) { description=page.description; } else if (page.excerpt) {
                     description=strip_html(page.excerpt); } else if (page.content) {
-                    description=strip_html(page.content); } else { description=config.description; }
-                    description=description.substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
+                    description=strip_html(page.content); } else { description=config.description || ''; }
+                    description=description.replace(/\s+/g, ' ').trim().substring(0, 150).trim(); var keywords='' ; if (page.keywords) {
                     keywords=page.keywords; } else if (page.tags && page.tags.length) {
                     keywords=page.tags.map(function(tag) { return tag.name; }).join(','); } function getFullUrl(path) {
                     if (path.startsWith('http')) return path; return config.url + (path.startsWith('/') ? '' : '/' ) +
-                    path; } var image=page.cover_image || config.default_image || '/favicon.jpg' ; var
+                    path; } var image=page.cover_image || (config.social_media &&
+                    config.social_media.default_image) || '/favicon.jpg' ; var
                     fullImageUrl=getFullUrl(image); var pageUrl=getFullUrl(page.path); let currentLocale=page.lang ||
                     page.language || config.language || 'en' ; if (currentLocale==='zh' ) currentLocale='zh_CN' ; else
                     if (currentLocale==='en' ) currentLocale='en_US' ; else if (currentLocale.includes('-'))
@@ -77,21 +78,25 @@
                     <% if (is_home()) { %>
                       <meta name="description"
                         content="Personal blog of Ke Fang featuring articles on AI, technology, and personal thoughts in both English and Chinese.">
-                      <% } else if (page.description) { %>
-                        <meta name="description" content="<%= page.description %>">
-                        <% } else if (page.excerpt) { %>
-                          <meta name="description"
-                            content="<%= strip_html(page.excerpt).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150) %>">
-                          <% } else if (page.content) { %>
-                            <meta name="description"
-                              content="<%= strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150) %>">
-                            <% } %>
+                      <% } else if (description) { %>
+                        <meta name="description" content="<%= description %>">
+                        <% } %>
                               <% if (keywords) { %>
                                 <meta name="keywords" content="<%= keywords %>">
                                 <% } %>
 
                                   <link rel="canonical"
                                     href="<%= config.url %>/<%= page.path.replace(/index\.html$/, '') %>">
+
+                                  <% if (page.translation) {
+                                    var selfHreflang = (page.language === 'en') ? 'en' : 'zh';
+                                    var otherHreflang = (selfHreflang === 'en') ? 'zh' : 'en';
+                                    var translationUrl = getFullUrl(page.translation); %>
+                                    <link rel="alternate" hreflang="<%= selfHreflang %>" href="<%= pageUrl %>">
+                                    <link rel="alternate" hreflang="<%= otherHreflang %>" href="<%= translationUrl %>">
+                                    <link rel="alternate" hreflang="x-default"
+                                      href="<%= selfHreflang === 'en' ? pageUrl : translationUrl %>">
+                                    <% } %>
 
                                   <!-- Open Graph -->
 
@@ -101,8 +106,7 @@
                                   <meta property="og:image" content="<%= fullImageUrl %>">
                                   <meta property="og:description" content="<%= description %>">
                                   <meta property="og:site_name" content="<%= config.title %>">
-                                  <meta property="og:locale"
-                                    content="<% if (config.language === 'zh') { %>zh_CN<% } else { %>en_US<% } %>">
+                                  <meta property="og:locale" content="<%= currentLocale %>">
                                   <meta property="article:author" content="<%= config.author %>">
                                   <% if (keywords) { %>
                                     <meta property="article:tag" content="<%= keywords %>">
@@ -122,6 +126,12 @@
                                               <meta name="twitter:title" content="<%= title %>">
                                               <meta name="twitter:description" content="<%= description %>">
                                               <meta name="twitter:image" content="<%= fullImageUrl %>">
+                                              <% if (config.social_media && config.social_media.twitter_username) { %>
+                                                <meta name="twitter:site"
+                                                  content="@<%= config.social_media.twitter_username %>">
+                                                <meta name="twitter:creator"
+                                                  content="@<%= config.social_media.twitter_username %>">
+                                                <% } %>
 
                                               <!-- Stylesheets -->
                                               <link rel="stylesheet" href="/css/style.css">
@@ -176,6 +186,7 @@
       },
       "datePublished": "<%= page.date.toISOString() %>",
       "dateModified": "<%= page.updated ? page.updated.toISOString() : page.date.toISOString() %>",
+      "inLanguage": "<%= (page.language === 'en') ? 'en' : 'zh-CN' %>",
       "keywords": "<%= keywords %>",
       "image": "<%= fullImageUrl %>",
       "publisher": {

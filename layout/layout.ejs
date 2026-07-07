@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<% if (config.language === 'zh') { %>zh-CN<% } else { %>en-US<% } %>">
+<html lang="<%= ((page.language || page.lang || config.language) === 'en') ? 'en' : 'zh-CN' %>">
 <%- partial('_partial/head') %>
 
   <body>
