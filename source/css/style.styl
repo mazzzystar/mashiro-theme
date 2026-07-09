@@ -14,18 +14,6 @@ input, button
     padding: 0
 
 @font-face
-  font-family: 'Gowun Dodum'
-  font-style: normal
-  font-weight: normal
-  src: url("/fonts/GowunDodum-Regular.woff2") format("woff2")
-
-@font-face
-  font-family: 'Gowun Dodum'
-  font-style: normal
-  font-weight: bold
-  src: url("/fonts/GowunDodum-Regular.woff2") format("woff2")
-
-@font-face
   font-family: FontAwesome
   font-style: normal
   font-weight: normal
@@ -159,3 +147,25 @@ if sidebar
   &:hover
     color: #333
     text-decoration: none
+// ===== Reading polish (typography refinements, 2026-07) =====
+// Links: thinner, lower underline — calmer inside body text
+.article-entry a
+  text-underline-offset: 0.2em
+  text-decoration-thickness: 1px
+
+// hr: short, centered, breathing room; adapts to dark mode via currentColor
+.article-entry hr
+  border: 0
+  border-top: 1px solid currentColor
+  opacity: 0.22
+  width: 38%
+  margin: 2.6em auto
+
+// English posts: justified text needs hyphenation to avoid rivers
+html[lang="en"] .article-entry p
+  -webkit-hyphens: auto
+  hyphens: auto
+
+// Subtle warm selection tint, matches the paper background
+::selection
+  background: rgba(180, 160, 120, 0.35)
