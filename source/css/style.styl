@@ -236,18 +236,7 @@ html[lang="en"] .article-entry p
   &.is-open img
     transform: scale(1)
 
-// ===== 朱批 accent & hairline texture (2026-07) =====
-// Links: vermilion (seal-ink) underline on ink text; hover turns 朱批 red
-.article-entry a
-  text-decoration-color: rgba(156, 69, 54, 0.45)
-  transition: color 0.15s, text-decoration-color 0.15s
-  &:hover
-    color: #9c4536
-    text-decoration-color: #9c4536
-
-::selection
-  background: rgba(156, 69, 54, 0.16)
-
+// ===== Hairline texture (2026-07) =====
 // Cards: layered hairline shadows instead of hard 1px borders
 .article-entry .link-preview-card,
 .article-entry .answer-block,
@@ -260,11 +249,6 @@ html[lang="en"] .article-entry p
   border: none
   box-shadow: none
 
-// Archive list: monospace dates
-.archive-article-date
-  font-family: font-mono
-  font-size: 0.82em
-
 // Manual image captions: an *italic* line right under the image
 .article-entry img + em
   display: block
@@ -273,18 +257,60 @@ html[lang="en"] .article-entry p
   color: color-grey
   margin-top: 0.5em
 
-// ===== Thoughts year nav =====
+// ===== Thoughts year nav — quiet inline row =====
 .thoughts-years
-  margin: 0.5em 0 1.5em
-  font-family: font-mono
-  font-size: 0.85em
-  a, .current
-    margin-right: 0.9em
+  margin: 0.2em 0 2em
+  font-size: 0.9em
+  color: #a29d95
   a
-    color: color-grey
+    color: #a29d95
     text-decoration: none
+    transition: color 0.15s
     &:hover
-      color: #9c4536
+      color: color-default
   .current
     color: color-default
-    font-weight: bold
+  .sep
+    margin: 0 0.45em
+    opacity: 0.55
+
+// ===== Code block chrome: ghost copy on hover, quiet expand bar =====
+.article-entry .copy-button
+  position: absolute
+  top: 8px
+  right: 8px
+  padding: 4px 10px
+  font-size: 0.72em
+  font-family: inherit
+  line-height: 1.2
+  color: #6d665d
+  background: rgba(250, 249, 246, 0.92)
+  border: none
+  border-radius: 6px
+  box-shadow: 0 0 0 1px rgba(60, 55, 48, 0.14)
+  cursor: pointer
+  opacity: 0
+  transition: opacity 0.15s
+
+.article-entry .highlight:hover .copy-button
+  opacity: 1
+
+@media (hover: none)
+  .article-entry .copy-button
+    opacity: 0.55
+
+.article-entry .code-expand-bar
+  display: block
+  width: 100%
+  text-align: left
+  padding: 9px 16px
+  background: none
+  border: none
+  cursor: pointer
+  color: #6d665d
+  font-family: inherit
+  font-size: 0.8em
+  letter-spacing: 0.05em
+
+.article-entry .highlight:not(.is-collapsed) .code-expand-bar
+  border-bottom: 1px solid rgba(183, 181, 172, 0.35)

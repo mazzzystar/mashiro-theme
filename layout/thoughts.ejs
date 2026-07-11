@@ -10,14 +10,13 @@
             <% } %>
                 <% if (page.thought_years && page.thought_years.length > 1) { %>
                     <nav class="thoughts-years">
-                        <% page.thought_years.forEach(function(y){
-                            var href = (y === page.thought_years[0]) ? '/thoughts/' : '/thoughts/' + y + '/';
+                        <% page.thought_years.forEach(function(y, i){
+                            var latest = (y === page.thought_years[0]);
+                            var href = latest ? '/thoughts/' : '/thoughts/' + y + '/';
+                            var label = latest ? '最新' : y;
                             var current = String(page.thought_year) === String(y); %>
-                            <% if (current) { %>
-                                <span class="current"><%= y %></span>
-                            <% } else { %>
-                                <a href="<%= href %>"><%= y %></a>
-                            <% } %>
+                            <% if (i > 0) { %><span class="sep">·</span><% } %>
+                            <% if (current) { %><span class="current"><%= label %></span><% } else { %><a href="<%= href %>"><%= label %></a><% } %>
                         <% }) %>
                     </nav>
                 <% } %>

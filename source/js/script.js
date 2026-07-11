@@ -70,65 +70,52 @@ document.addEventListener('DOMContentLoaded', function () {
     scroll.appendChild(table);
   });
 
-  /* ---------- Code block toolbar: fold + copy ---------- */
+  /* ---------- Code blocks: ghost copy button + quiet expand bar ---------- */
   function getCodeText(block) {
     var code = block.querySelector('pre code');
     return code ? code.innerText : '';
   }
 
-  function setFoldState(block, collapsed) {
-    var toggle = block.querySelector('.code-fold-toggle');
-    block.classList.toggle('is-collapsed', collapsed);
-    block.setAttribute('data-code-fold', collapsed ? 'collapsed' : 'open');
-    if (toggle) {
-      toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-      toggle.textContent = collapsed ? 'Expand' : 'Collapse';
-    }
-  }
-
-  function ensureCodeToolbar(block) {
+  function setupCodeBlock(block) {
     if (!block.querySelector('pre')) return;
     block.classList.add('code-block');
 
-    if (!block.querySelector('.code-block-toolbar')) {
-      var lang = block.getAttribute('data-code-lang') || 'text';
-      var toolbar = document.createElement('div');
-      toolbar.className = 'code-block-toolbar';
-      toolbar.innerHTML = '<span class="code-block-lang">' + lang + '</span>' +
-        '<div class="code-block-actions">' +
-        '<button class="code-fold-toggle" type="button" aria-expanded="true">Collapse</button>' +
-        '<button class="copy-button" type="button">Copy</button>' +
-        '</div>';
-      block.insertBefore(toolbar, block.firstChild);
-    }
-
-    var toggle = block.querySelector('.code-fold-toggle');
-    if (toggle && !toggle.dataset.bound) {
-      toggle.dataset.bound = 'true';
-      toggle.addEventListener('click', function () {
-        setFoldState(block, !block.classList.contains('is-collapsed'));
-      });
-    }
-
-    var copyButton = block.querySelector('.copy-button');
-    if (copyButton && !copyButton.dataset.bound) {
-      copyButton.dataset.bound = 'true';
+    if (!block.querySelector('.copy-button')) {
+      var copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.type = 'button';
+      copyButton.textContent = 'Copy';
       copyButton.addEventListener('click', function () {
         if (navigator.clipboard) navigator.clipboard.writeText(getCodeText(block));
-        copyButton.textContent = 'Copied!';
+        copyButton.textContent = 'Copied';
         setTimeout(function () {
           copyButton.textContent = 'Copy';
         }, 1000);
       });
+      block.appendChild(copyButton);
     }
 
-    setFoldState(block, block.classList.contains('is-collapsed') ||
-      block.getAttribute('data-code-fold') === 'collapsed');
+    // fence-flagged collapsed blocks get a quiet "lang ▸" bar
+    var collapsed = block.classList.contains('is-collapsed') ||
+      block.getAttribute('data-code-fold') === 'collapsed';
+    if (collapsed && !block.querySelector('.code-expand-bar')) {
+      var lang = block.getAttribute('data-code-lang') || 'code';
+      var bar = document.createElement('button');
+      bar.className = 'code-expand-bar';
+      bar.type = 'button';
+      block.classList.add('is-collapsed');
+      bar.textContent = lang + ' \u25B8';
+      bar.addEventListener('click', function () {
+        var nowCollapsed = block.classList.toggle('is-collapsed');
+        bar.textContent = lang + (nowCollapsed ? ' \u25B8' : ' \u25BE');
+      });
+      block.insertBefore(bar, block.firstChild);
+    }
   }
 
   document.querySelectorAll('.article-entry .highlight').forEach(function (block) {
     if (block.closest('.gist')) return;
-    ensureCodeToolbar(block);
+    setupCodeBlock(block);
   });
 
   /* ---------- X (Twitter) embeds ---------- */
