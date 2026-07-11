@@ -2909,3 +2909,37 @@ html[lang="en"] .article-entry p {
 .article-entry .highlight:not(.is-collapsed) .code-expand-bar {
   border-bottom: 1px solid rgba(183, 181, 172, 0.35);
 }
+
+/* ===== Thoughts: year divider + load-previous-year button ===== */
+.thoughts-year-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 2.6em 0 1.6em;
+  color: #a29d95;
+  font-size: 0.9em;
+}
+.thoughts-year-divider:before,
+.thoughts-year-divider:after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid rgba(183, 181, 172, 0.4);
+}
+.thoughts-more {
+  display: block;
+  margin: 1.5em auto 0.5em;
+  padding: 6px 14px;
+  background: none;
+  border: none;
+  color: #a29d95;
+  font-family: inherit;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.thoughts-more:hover {
+  color: #100f0f;
+}
+.thoughts-more:disabled {
+  cursor: default;
+}

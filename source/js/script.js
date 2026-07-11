@@ -155,4 +155,41 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   loadTwitterWidgets();
+
+  /* ---------- Thoughts: load previous year in place ---------- */
+  var moreBtn = document.querySelector('.thoughts-more');
+  if (moreBtn) {
+    var thoughtYears = (moreBtn.dataset.years || '').split(',');
+    moreBtn.addEventListener('click', function () {
+      var next = moreBtn.dataset.next;
+      if (!next) return;
+      moreBtn.disabled = true;
+      moreBtn.textContent = '\u2026';
+      fetch('/thoughts/' + next + '/')
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var entry = document.querySelector('.article-type-thoughts .article-entry');
+          var divider = document.createElement('div');
+          divider.className = 'thoughts-year-divider';
+          divider.innerHTML = '<span>' + next + '</span>';
+          entry.appendChild(divider);
+          doc.querySelectorAll('.article-entry .thought').forEach(function (n) {
+            entry.appendChild(n);
+          });
+          var after = thoughtYears[thoughtYears.indexOf(next) + 1];
+          if (after) {
+            moreBtn.dataset.next = after;
+            moreBtn.textContent = '\u2193 ' + after;
+            moreBtn.disabled = false;
+          } else {
+            moreBtn.remove();
+          }
+        })
+        .catch(function () {
+          moreBtn.disabled = false;
+          moreBtn.textContent = '\u2193 ' + next;
+        });
+    });
+  }
 });

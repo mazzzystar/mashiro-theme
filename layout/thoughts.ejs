@@ -21,28 +21,40 @@
                     </nav>
                 <% } %>
                 <div class="article-entry">
-                    <% if (page.thoughts && page.thoughts.length) { %>
-                        <% page.thoughts.forEach(function(thought){ %>
-                            <div class="thought">
-                                <div class="thought-content">
-                                    <% thought.content.split('\n\n').forEach(function(para) { %>
-                                        <% if(para.trim()) { %>
-                                            <%- markdown(para.trim()) %>
-                                                <% } %>
-                                                    <% }); %>
+                    <% var groups = page.thought_groups ||
+                        (page.thoughts && page.thoughts.length ? [{ year: null, thoughts: page.thoughts }] : []); %>
+                    <% if (groups.length) { %>
+                        <% groups.forEach(function(group, gi){ %>
+                            <% if (gi > 0 && group.year) { %>
+                                <div class="thoughts-year-divider"><span><%= group.year %></span></div>
+                            <% } %>
+                            <% group.thoughts.forEach(function(thought){ %>
+                                <div class="thought">
+                                    <div class="thought-content">
+                                        <% thought.content.split('\n\n').forEach(function(para) { %>
+                                            <% if(para.trim()) { %>
+                                                <%- markdown(para.trim()) %>
+                                            <% } %>
+                                        <% }); %>
+                                    </div>
+                                    <div class="thought-timestamp">
+                                        <% var date=new Date(thought.timestamp); var formattedDate=date.getFullYear() + '-'
+                                            + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' +
+                                            date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0'
+                                            + date.getMinutes()).slice(-2); %>
+                                            <%= formattedDate %>
+                                    </div>
                                 </div>
-                                <div class="thought-timestamp">
-                                    <% var date=new Date(thought.timestamp); var formattedDate=date.getFullYear() + '-'
-                                        + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' +
-                                        date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0'
-                                        + date.getMinutes()).slice(-2); %>
-                                        <%= formattedDate %>
-                                </div>
-                            </div>
                             <% }) %>
-                                <% } else { %>
-                                    <p>No thoughts yet.</p>
-                                    <% } %>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No thoughts yet.</p>
+                    <% } %>
                 </div>
+                <% if (page.thought_next_year) { %>
+                    <button class="thoughts-more" type="button"
+                        data-next="<%= page.thought_next_year %>"
+                        data-years="<%= page.thought_years.join(',') %>">↓ <%= page.thought_next_year %></button>
+                <% } %>
     </div>
 </article>
