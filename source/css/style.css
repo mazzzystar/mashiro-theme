@@ -1615,80 +1615,8 @@ a.article-title:hover {
   color: inherit;
   padding: 0;
 }
-.article-entry .code-block-toolbar {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: box;
-  display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  -webkit-box-pack: justify;
-  -moz-box-pack: justify;
-  -ms-flex-pack: justify;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
-  gap: 10px;
-  min-height: 38px;
-  padding: 0 10px 0 14px;
-  border-bottom: 1px solid rgba(183,181,172,0.58);
-  background: #e9e9e6;
-}
-.article-entry .code-block-lang {
-  color: #6d665d;
-  font-family: font-sans;
-  font-size: 0.78em;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-.article-entry .code-block-actions {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: box;
-  display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  gap: 6px;
-}
-.article-entry .copy-button,
-.article-entry .code-fold-toggle {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: 1px solid rgba(183,181,172,0.8);
-  border-radius: 6px;
-  background: rgba(255,255,255,0.56);
-  color: #4c4740;
-  cursor: pointer;
-  font-family: font-sans;
-  font-size: 0.74em;
-  line-height: 1;
-  padding: 6px 8px;
-  -webkit-transition: background 0.18s, border-color 0.18s, color 0.18s;
-  -moz-transition: background 0.18s, border-color 0.18s, color 0.18s;
-  -ms-transition: background 0.18s, border-color 0.18s, color 0.18s;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
-}
-.article-entry .copy-button:hover,
-.article-entry .code-fold-toggle:hover {
-  background: rgba(255,255,255,0.92);
-  border-color: rgba(130,125,116,0.8);
-}
 .article-entry .highlight.is-collapsed pre {
   display: none;
-}
-.article-entry .highlight.is-collapsed .code-block-toolbar {
-  border-bottom: none;
 }
 .article-entry .answer-block {
   border: 1px solid rgba(183,181,172,0.76);
