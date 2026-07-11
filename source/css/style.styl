@@ -235,3 +235,40 @@ html[lang="en"] .article-entry p
     pointer-events: auto
   &.is-open img
     transform: scale(1)
+
+// ===== 朱批 accent & hairline texture (2026-07) =====
+// Links: vermilion (seal-ink) underline on ink text; hover turns 朱批 red
+.article-entry a
+  text-decoration-color: rgba(156, 69, 54, 0.45)
+  transition: color 0.15s, text-decoration-color 0.15s
+  &:hover
+    color: #9c4536
+    text-decoration-color: #9c4536
+
+::selection
+  background: rgba(156, 69, 54, 0.16)
+
+// Cards: layered hairline shadows instead of hard 1px borders
+.article-entry .link-preview-card,
+.article-entry .answer-block,
+.article-entry .highlight,
+.article-entry .table-scroll
+  border: none
+  box-shadow: 0 0 0 1px rgba(60, 55, 48, 0.10), 0 1px 2px rgba(60, 55, 48, 0.05), 0 2px 6px rgba(60, 55, 48, 0.04)
+
+.article-entry .highlight pre
+  border: none
+  box-shadow: none
+
+// Archive list: monospace dates
+.archive-article-date
+  font-family: font-mono
+  font-size: 0.82em
+
+// Manual image captions: an *italic* line right under the image
+.article-entry img + em
+  display: block
+  text-align: center
+  font-size: 0.875em
+  color: color-grey
+  margin-top: 0.5em
