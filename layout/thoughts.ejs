@@ -8,6 +8,19 @@
                 </p>
             </blockquote>
             <% } %>
+                <% if (page.thought_years && page.thought_years.length > 1) { %>
+                    <nav class="thoughts-years">
+                        <% page.thought_years.forEach(function(y){
+                            var href = (y === page.thought_years[0]) ? '/thoughts/' : '/thoughts/' + y + '/';
+                            var current = String(page.thought_year) === String(y); %>
+                            <% if (current) { %>
+                                <span class="current"><%= y %></span>
+                            <% } else { %>
+                                <a href="<%= href %>"><%= y %></a>
+                            <% } %>
+                        <% }) %>
+                    </nav>
+                <% } %>
                 <div class="article-entry">
                     <% if (page.thoughts && page.thoughts.length) { %>
                         <% page.thoughts.forEach(function(thought){ %>

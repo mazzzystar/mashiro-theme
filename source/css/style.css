@@ -2932,3 +2932,23 @@ html[lang="en"] .article-entry p {
   color: #595753;
   margin-top: 0.5em;
 }
+/* ===== Thoughts year nav ===== */
+.thoughts-years {
+  margin: 0.5em 0 1.5em;
+  font-family: 'Fira Code', 'Chinese', monospace;
+  font-size: 0.85em;
+}
+.thoughts-years a, .thoughts-years .current {
+  margin-right: 0.9em;
+}
+.thoughts-years a {
+  color: #595753;
+  text-decoration: none;
+}
+.thoughts-years a:hover {
+  color: #9c4536;
+}
+.thoughts-years .current {
+  color: #100f0f;
+  font-weight: bold;
+}
