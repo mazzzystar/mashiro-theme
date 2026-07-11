@@ -1,65 +1,76 @@
-$(document).ready(function() {
-  // Initialize fancybox for images
-  $('.article-entry').each(function(i) {
-    $(this).find('img').each(function() {
-      if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
-      
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+// Vanilla JS — no jQuery. Image lightbox, mobile nav, table wrapping,
+// code block toolbar (fold/copy), X embed loading.
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
 
-      $(this).wrap('<a class="fancybox" rel="gallery' + i + '" href="' + this.src + '" title="' + alt + '"></a>');
+  /* ---------- Image lightbox (replaces fancybox) ---------- */
+  var overlay = null;
+
+  function closeLightbox() {
+    if (!overlay) return;
+    overlay.classList.remove('is-open');
+    document.removeEventListener('keydown', onLightboxKey);
+  }
+
+  function onLightboxKey(e) {
+    if (e.key === 'Escape') closeLightbox();
+  }
+
+  function openLightbox(src, alt) {
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'lightbox';
+      overlay.innerHTML = '<img alt="">';
+      overlay.addEventListener('click', closeLightbox);
+      document.body.appendChild(overlay);
+    }
+    var img = overlay.querySelector('img');
+    img.src = src;
+    img.alt = alt || '';
+    // double rAF so the transition plays on first open
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        overlay.classList.add('is-open');
+      });
+    });
+    document.addEventListener('keydown', onLightboxKey);
+  }
+
+  document.querySelectorAll('.article-entry img').forEach(function (img) {
+    if (img.closest('a')) return; // linked images keep their link
+    img.classList.add('zoomable');
+    img.addEventListener('click', function () {
+      openLightbox(img.currentSrc || img.src, img.alt);
     });
   });
 
-  // Initialize fancybox with modern browser check
-  if (typeof $.fn.fancybox === 'function') {
-    $('.fancybox').fancybox({
-      openEffect: 'elastic',
-      closeEffect: 'elastic'
-    });
-  }
-
-  // Mobile nav
-  var $container = $('#container'),
-    isMobileNavAnim = false,
-    mobileNavAnimDuration = 200;
-
-  var startMobileNavAnim = function(){
-    isMobileNavAnim = true;
-  };
-
-  var stopMobileNavAnim = function(){
-    setTimeout(function(){
-      isMobileNavAnim = false;
-    }, mobileNavAnimDuration);
-  }
-
-  var nav = document.getElementById('main-nav-toggle');
-  if (nav) {
-    nav.onclick = function(){
-      if (isMobileNavAnim) return;
-
-      startMobileNavAnim();
-      $container.toggleClass('mobile-nav-on');
-      stopMobileNavAnim();
-    };
-  }
-
+  /* ---------- Mobile nav ---------- */
+  var container = document.getElementById('container');
+  var navToggle = document.getElementById('main-nav-toggle');
   var wrap = document.getElementById('wrap');
-  if (wrap) {
-    wrap.onclick = function(){
-      if (isMobileNavAnim || !$container.hasClass('mobile-nav-on')) return;
 
-      $container.removeClass('mobile-nav-on');
-    };
+  if (navToggle && container) {
+    navToggle.addEventListener('click', function () {
+      container.classList.toggle('mobile-nav-on');
+    });
+  }
+  if (wrap && container) {
+    wrap.addEventListener('click', function () {
+      container.classList.remove('mobile-nav-on');
+    });
   }
 
-  // Keep legacy/raw HTML tables readable when they are not emitted by markdown.
-  $('.article-entry table').each(function() {
-    if ($(this).parent().hasClass('table-scroll')) return;
-    $(this).wrap('<div class="table-scroll"></div>');
+  /* ---------- Wrap raw HTML tables so they stay readable ---------- */
+  document.querySelectorAll('.article-entry table').forEach(function (table) {
+    if (table.parentElement.classList.contains('table-scroll')) return;
+    if (table.closest('.table-scroll')) return;
+    var scroll = document.createElement('div');
+    scroll.className = 'table-scroll';
+    table.parentNode.insertBefore(scroll, table);
+    scroll.appendChild(table);
   });
 
+  /* ---------- Code block toolbar: fold + copy ---------- */
   function getCodeText(block) {
     var code = block.querySelector('pre code');
     return code ? code.innerText : '';
@@ -69,16 +80,14 @@ $(document).ready(function() {
     var toggle = block.querySelector('.code-fold-toggle');
     block.classList.toggle('is-collapsed', collapsed);
     block.setAttribute('data-code-fold', collapsed ? 'collapsed' : 'open');
-
     if (toggle) {
       toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-      toggle.innerHTML = collapsed ? 'Expand' : 'Collapse';
+      toggle.textContent = collapsed ? 'Expand' : 'Collapse';
     }
   }
 
   function ensureCodeToolbar(block) {
     if (!block.querySelector('pre')) return;
-
     block.classList.add('code-block');
 
     if (!block.querySelector('.code-block-toolbar')) {
@@ -94,53 +103,41 @@ $(document).ready(function() {
     }
 
     var toggle = block.querySelector('.code-fold-toggle');
-    if (toggle && !toggle.getAttribute('data-bound')) {
-      toggle.setAttribute('data-bound', 'true');
-      toggle.onclick = function() {
+    if (toggle && !toggle.dataset.bound) {
+      toggle.dataset.bound = 'true';
+      toggle.addEventListener('click', function () {
         setFoldState(block, !block.classList.contains('is-collapsed'));
-      };
+      });
     }
 
     var copyButton = block.querySelector('.copy-button');
-    if (copyButton && !copyButton.getAttribute('data-bound')) {
-      copyButton.setAttribute('data-bound', 'true');
-
-      if (typeof ClipboardJS === 'function') {
-        new ClipboardJS(copyButton, {
-          text: function() {
-            return getCodeText(block);
-          }
-        });
-      }
-
-      copyButton.onclick = function() {
-        if (typeof ClipboardJS !== 'function' && navigator.clipboard) {
-          navigator.clipboard.writeText(getCodeText(block));
-        }
-
-        copyButton.innerHTML = 'Copied!';
-        setTimeout(function() {
-          copyButton.innerHTML = 'Copy';
+    if (copyButton && !copyButton.dataset.bound) {
+      copyButton.dataset.bound = 'true';
+      copyButton.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(getCodeText(block));
+        copyButton.textContent = 'Copied!';
+        setTimeout(function () {
+          copyButton.textContent = 'Copy';
         }, 1000);
-      };
+      });
     }
 
-    setFoldState(block, block.classList.contains('is-collapsed') || block.getAttribute('data-code-fold') === 'collapsed');
+    setFoldState(block, block.classList.contains('is-collapsed') ||
+      block.getAttribute('data-code-fold') === 'collapsed');
   }
 
-  var codeBlocks = document.querySelectorAll('.article-entry .highlight');
-  for (var i = 0; i < codeBlocks.length; ++i) {
-    if ($(codeBlocks[i]).closest('.gist').length) continue;
-    ensureCodeToolbar(codeBlocks[i]);
-  }
+  document.querySelectorAll('.article-entry .highlight').forEach(function (block) {
+    if (block.closest('.gist')) return;
+    ensureCodeToolbar(block);
+  });
 
+  /* ---------- X (Twitter) embeds ---------- */
   function syncTweetEmbeds() {
-    var cards = document.querySelectorAll('.x-embed-card');
-    for (var i = 0; i < cards.length; ++i) {
-      if (cards[i].querySelector('iframe.twitter-tweet-rendered, iframe[id^="twitter-widget-"]')) {
-        cards[i].classList.add('is-rendered');
+    document.querySelectorAll('.x-embed-card').forEach(function (card) {
+      if (card.querySelector('iframe.twitter-tweet-rendered, iframe[id^="twitter-widget-"]')) {
+        card.classList.add('is-rendered');
       }
-    }
+    });
   }
 
   function loadTwitterWidgets() {
@@ -157,7 +154,7 @@ $(document).ready(function() {
       script.async = true;
       script.charset = 'utf-8';
       script.src = 'https://platform.twitter.com/widgets.js';
-      script.onload = function() {
+      script.onload = function () {
         if (window.twttr && window.twttr.widgets) {
           window.twttr.widgets.load(document.body);
         }

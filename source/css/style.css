@@ -2880,3 +2880,38 @@ html[lang="en"] .article-entry p {
 ::selection {
   background: rgba(180, 160, 120, 0.35);
 }
+
+/* ===== Vanilla lightbox (replaces fancybox) ===== */
+.article-entry img.zoomable {
+  cursor: zoom-in;
+}
+#lightbox {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 14, 13, 0.92);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+  cursor: zoom-out;
+}
+#lightbox img {
+  max-width: 94vw;
+  max-height: 92vh;
+  border-radius: 4px;
+  transform: scale(0.98);
+  transition: transform 0.22s ease;
+}
+#lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+#lightbox.is-open img {
+  transform: scale(1);
+}
