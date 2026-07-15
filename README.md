@@ -10,7 +10,7 @@ Used on [mazzzystar.com](https://mazzzystar.com).
 - **Font loader**: Added `source/js/font-loader.js` for async font loading
 - **Template updates**: Modified `layout.ejs`, `head.ejs`, `post/title.ejs` for font integration
 - **Language**: Consolidated `zh-CN.yml`/`zh-TW.yml` into `zh.yml`
-- **Style tweaks**: Adjusted `_variables.styl`, `style.styl`, `style.css`
+- **Style source**: `source/css/style.styl` is the sole canonical entry and is compiled to `css/style.css`; never commit a precompiled sibling `source/css/style.css`
 
 ## Original
 
