@@ -6,7 +6,7 @@
       <% } %>
 
         <% for (var i in theme.menu){ %>
-          <a class="main-nav-link" href="<%- url_for(theme.menu[i]) %>">
+          <a class="main-nav-link" href="<%- url_for(theme.menu[i], {relative: false}) %>">
             <%= i %>
           </a>
           <% } %>
@@ -32,7 +32,7 @@
 </div>
 <div id="header-title">
   <h1 id="logo-wrap">
-    <a href="<%- url_for() %>" id="logo">
+    <a href="<%- url_for('/', {relative: false}) %>" id="logo">
       <%= config.title.replace(/，/g, ', ' ).replace(/；/g, '; ' ).replace(/：/g, ': ' ).replace(/！/g, '! '
         ).replace(/‘/g, '` ' ).replace(/’/g, "' " ).replace(/“/g, ' “' ).replace(/”/g, "” " ).replace(/（/g, ' ('
         ).replace(/）/g, ') ' ).replace(/。/g, '. ' ).replace(/？/g, '? ' ) %>
@@ -40,7 +40,7 @@
   </h1>
   <% if (theme.subtitle || config.subtitle){ %>
     <h2 id="subtitle-wrap">
-      <a href="<%- url_for() %>" id="subtitle">
+      <a href="<%- url_for('/', {relative: false}) %>" id="subtitle">
         <%= (theme.subtitle || config.subtitle).replace(/，/g, ', ' ).replace(/；/g, '; ' ).replace(/：/g, ': '
           ).replace(/！/g, '! ' ).replace(/‘/g, '` ' ).replace(/’/g, "' " ).replace(/“/g, ' “' ).replace(/”/g, "” "
           ).replace(/（/g, ' (' ).replace(/）/g, ') ' ).replace(/。/g, '. ' ).replace(/？/g, '? ' ) %>

@@ -69,7 +69,7 @@
                     if (path.startsWith('http')) return path; return config.url + (path.startsWith('/') ? '' : '/' ) +
                     path; } var image=page.cover_image || (config.social_media &&
                     config.social_media.default_image) || '/favicon.jpg' ; var
-                    fullImageUrl=getFullUrl(image); var pageUrl=getFullUrl(page.path); let currentLocale=page.lang ||
+                    fullImageUrl=getFullUrl(image); var pageUrl=full_url_for(page.path || '/'); let currentLocale=page.lang ||
                     page.language || config.language || 'en' ; if (currentLocale==='zh' ) currentLocale='zh_CN' ; else
                     if (currentLocale==='en' ) currentLocale='en_US' ; else if (currentLocale.includes('-'))
                     currentLocale=currentLocale.replace('-', '_' ); else currentLocale=currentLocale + '_' +
@@ -90,13 +90,12 @@
                                 <meta name="keywords" content="<%= keywords %>">
                                 <% } %>
 
-                                  <link rel="canonical"
-                                    href="<%= config.url %>/<%= page.path.replace(/index\.html$/, '') %>">
+                                  <link rel="canonical" href="<%= pageUrl %>">
 
                                   <% if (page.translation) {
                                     var selfHreflang = (page.language === 'en') ? 'en' : 'zh';
                                     var otherHreflang = (selfHreflang === 'en') ? 'zh' : 'en';
-                                    var translationUrl = getFullUrl(page.translation); %>
+                                    var translationUrl = full_url_for(page.translation); %>
                                     <link rel="alternate" hreflang="<%= selfHreflang %>" href="<%= pageUrl %>">
                                     <link rel="alternate" hreflang="<%= otherHreflang %>" href="<%= translationUrl %>">
                                     <link rel="alternate" hreflang="x-default"

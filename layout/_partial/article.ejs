@@ -18,7 +18,7 @@
                   <%- post.excerpt %>
                     <% if (theme.excerpt_link){ %>
                       <p class="article-more-link">
-                        <a href="<%- url_for(post.path) %>#more">
+                        <a href="<%- url_for(post.path, {relative: false}) %>#more">
                           <%= theme.excerpt_link %>
                         </a>
                       </p>
@@ -34,8 +34,8 @@
                 </a>
                 <% } %>
                   <% if (post.comments && theme.valine.enable && theme.valine.appId && theme.valine.appKey ){ %>
-                    <a href="<%- url_for(post.path) %>#comments" class="article-comment-link">
-                      <span class="post-comments-count valine-comment-count" data-xid="<%- url_for(post.path) %>"
+                    <a href="<%- url_for(post.path, {relative: false}) %>#comments" class="article-comment-link">
+                      <span class="post-comments-count valine-comment-count" data-xid="<%- url_for(post.path, {relative: false}) %>"
                         itemprop="commentCount"></span>
                       <%= __('comment') %>
                     </a>

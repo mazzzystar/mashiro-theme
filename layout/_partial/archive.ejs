@@ -9,7 +9,7 @@
     </section>
     <% } %>
       <div class="archive-year-wrap">
-        <a href="<%- url_for(config.archive_dir + '/' + currentYear) %>" class="archive-year">
+        <a href="<%- url_for(config.archive_dir + '/' + currentYear + '/', {relative: false}) %>" class="archive-year">
           <%= currentYear %>
         </a>
       </div>
@@ -45,7 +45,7 @@
                       <% last=year; %>
                         <section class="archives-wrap">
                           <div class="archive-year-wrap">
-                            <a href="<%- url_for(config.archive_dir + '/' + year) %>" class="archive-year">
+                            <a href="<%- url_for(config.archive_dir + '/' + year + '/', {relative: false}) %>" class="archive-year">
                               <%= year %>
                             </a>
                           </div>

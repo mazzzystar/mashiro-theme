@@ -11,7 +11,7 @@ while (olderPost && !sameLang(olderPost)) olderPost = olderPost.next;
 <% if (newerPost || olderPost){ %>
 <nav id="article-nav">
   <% if (newerPost){ %>
-    <a href="<%- url_for(newerPost.path) %>" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="<%- url_for(newerPost.path, {relative: false}) %>" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><%= __('newer') %></strong>
       <div class="article-nav-title">
         <% if (newerPost.title){ %>
@@ -23,7 +23,7 @@ while (olderPost && !sameLang(olderPost)) olderPost = olderPost.next;
     </a>
   <% } %>
   <% if (olderPost){ %>
-    <a href="<%- url_for(olderPost.path) %>" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="<%- url_for(olderPost.path, {relative: false}) %>" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><%= __('older') %></strong>
       <div class="article-nav-title">
         <% if (olderPost.title){ %>
