@@ -3,7 +3,9 @@
 
 .article-inner
   @extend $block
-  overflow: hidden
+  // Keep the 1px hairline around code, tables, answer blocks and link cards visible.
+  // Each component still owns its internal overflow/scrolling behavior.
+  overflow: visible
 
 .article-meta
   clearfix()
